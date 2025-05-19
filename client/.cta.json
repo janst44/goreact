@@ -9,10 +9,6 @@
   "framework": "react-cra",
   "chosenAddOns": [
     "eslint",
-    "clerk",
-    "neon",
-    "form",
-    "netlify",
-    "start"
+    "shadcn"
   ]
 }

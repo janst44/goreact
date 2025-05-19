@@ -1,61 +1,14 @@
-import {
-  Outlet,
-  HeadContent,
-  Scripts,
-  createRootRoute,
-} from '@tanstack/react-router'
-import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
-
+import { Outlet, createRootRoute } from '@tanstack/react-router'
+import { Toaster } from 'sonner'
 import Header from '../components/Header'
-
-import ClerkProvider from './src/integrations/clerk/provider.tsx'
-
-import appCss from '../styles.css?url'
+import { ThemeProvider } from '@/lib/theme'
 
 export const Route = createRootRoute({
-  head: () => ({
-    meta: [
-      {
-        charSet: 'utf-8',
-      },
-      {
-        name: 'viewport',
-        content: 'width=device-width, initial-scale=1',
-      },
-      {
-        title: 'TanStack Start Starter',
-      },
-    ],
-    links: [
-      {
-        rel: 'stylesheet',
-        href: appCss,
-      },
-    ],
-  }),
-
   component: () => (
-    <RootDocument>
-      <ClerkProvider>
-        <Header />
-
-        <Outlet />
-        <TanStackRouterDevtools />
-      </ClerkProvider>
-    </RootDocument>
+    <ThemeProvider>
+      <Toaster richColors />
+      <Header />
+      <Outlet />
+    </ThemeProvider>
   ),
 })
-
-function RootDocument({ children }: { children: React.ReactNode }) {
-  return (
-    <html lang="en">
-      <head>
-        <HeadContent />
-      </head>
-      <body>
-        {children}
-        <Scripts />
-      </body>
-    </html>
-  )
-}

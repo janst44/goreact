@@ -1,42 +1,39 @@
 import { Link } from '@tanstack/react-router'
-
-import ClerkHeader from './src/integrations/clerk/header-user.tsx'
+import { Button } from '@/components/ui/button'
+import { useAuthStore } from '@/lib/auth'
+import { Moon, Sun } from 'lucide-react'
+import { useTheme } from '@/lib/theme'
 
 export default function Header() {
+  const { isAuthenticated, logout } = useAuthStore()
+  const { theme, toggleTheme } = useTheme()
+
   return (
-    <header className="p-2 flex gap-2 bg-white text-black justify-between">
-      <nav className="flex flex-row">
-        <div className="px-2 font-bold">
-          <Link to="/">Home</Link>
+    <header className="header">
+      <div className="header-container">
+        <div className="header-nav">
+          <Link to="/" className="header-logo">
+            <span className="header-logo-text">Todo App</span>
+          </Link>
         </div>
-
-        <div className="px-2 font-bold">
-          <Link to="/demo/clerk">Clerk</Link>
-        </div>
-
-        <div className="px-2 font-bold">
-          <Link to="/demo/neon">Neon</Link>
-        </div>
-
-        <div className="px-2 font-bold">
-          <Link to="/demo/form/simple">Simple Form</Link>
-        </div>
-
-        <div className="px-2 font-bold">
-          <Link to="/demo/form/address">Address Form</Link>
-        </div>
-
-        <div className="px-2 font-bold">
-          <Link to="/demo/start/server-funcs">Start - Server Functions</Link>
-        </div>
-
-        <div className="px-2 font-bold">
-          <Link to="/demo/start/api-request">Start - API Request</Link>
-        </div>
-      </nav>
-
-      <div>
-        <ClerkHeader />
+        <div className="flex-1" />
+        <Button
+          variant="ghost"
+          size="icon"
+          onClick={toggleTheme}
+          className="mr-2"
+        >
+          {theme === 'dark' ? (
+            <Sun className="h-5 w-5" />
+          ) : (
+            <Moon className="h-5 w-5" />
+          )}
+        </Button>
+        {isAuthenticated && (
+          <Button variant="ghost" onClick={logout}>
+            Logout
+          </Button>
+        )}
       </div>
     </header>
   )

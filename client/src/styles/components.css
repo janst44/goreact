@@ -1,0 +1,128 @@
+@layer components {
+  /* Layout */
+  .container {
+    @apply mx-auto p-6;
+  }
+
+  .todo-container {
+    @apply mx-auto p-6 max-w-2xl flex flex-col space-y-8;
+  }
+
+  /* Forms */
+  .form {
+    @apply flex flex-col space-y-6 w-full mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md;
+  }
+
+  .form-label {
+    @apply text-gray-700 dark:text-gray-200;
+  }
+
+  .form-input {
+    @apply w-full;
+  }
+
+  .form-error {
+    @apply text-red-500;
+  }
+
+  /* Todo Components */
+  .todo-form {
+    @apply flex flex-col space-y-4 w-full mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md;
+  }
+
+  .todo-list {
+    @apply flex flex-col space-y-4;
+  }
+
+  .todo-item-content {
+    @apply p-4 flex items-center justify-between;
+  }
+
+  .todo-item-left {
+    @apply flex items-center space-x-4;
+  }
+
+  .todo-item-text {
+    @apply font-medium;
+  }
+
+  .todo-item-text-completed {
+    @apply line-through text-gray-400;
+  }
+
+  .todo-item-description {
+    @apply text-sm text-gray-400;
+  }
+
+  /* Authentication Components */
+  .auth-form {
+    @apply flex flex-col space-y-6 w-full mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md max-w-md;
+  }
+
+  .auth-title {
+    @apply text-2xl font-bold text-center mb-6 text-gray-900 dark:text-white;
+  }
+
+  .register-form {
+    @apply space-y-6 w-full mx-auto p-6 bg-white dark:bg-gray-800 rounded-lg shadow-md;
+  }
+
+  /* Buttons */
+  .button {
+    @apply w-full transition-colors duration-150 ease-in-out;
+  }
+
+  .primary-button {
+    @apply  w-full transition-colors duration-150 ease-in-out bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md;
+  }
+
+  .register-form-button {
+    @apply w-full transition-colors duration-150 ease-in-out bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded-md;
+  }
+
+  /* Header Components */
+  .header {
+    @apply sticky top-0 z-50 w-full border-b border-border bg-background backdrop-blur-sm;
+  }
+
+  .header-container {
+    @apply flex h-14 items-center;
+  }
+
+  .header-nav {
+    @apply mr-4 flex;
+  }
+
+  .header-logo {
+    @apply mr-6 flex items-center space-x-2;
+  }
+
+  .header-logo-text {
+    @apply font-bold;
+  }
+
+  /* Layout */
+  .app-container {
+    @apply min-h-screen bg-background;
+  }
+
+  .app-main {
+    @apply mx-auto p-6;
+  }
+
+  .auth-buttons-container {
+    @apply flex justify-center space-x-4 mt-8;
+  }
+
+  .todo-checkbox {
+    @apply relative appearance-none h-5 w-5 rounded-sm border-2 cursor-pointer;
+    @apply border-blue-600 bg-white dark:border-blue-400 dark:bg-gray-900;
+    @apply checked:bg-blue-600 checked:border-transparent dark:checked:bg-blue-400;
+  }
+  
+  .todo-checkbox:checked::after {
+    content: '✔';
+    @apply absolute left-[0.15rem] top-0 text-white text-sm;
+    line-height: 1;
+  }
+}

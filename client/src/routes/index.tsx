@@ -1,39 +1,46 @@
 import { createFileRoute } from '@tanstack/react-router'
-import logo from '../logo.svg'
+import { useAuthStore } from '@/lib/auth'
+import { TodoList } from '@/components/todo/todo-list'
+import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog"
+import { Button } from '@/components/ui/button'
+import { LoginForm } from '@/components/auth/login-form'
+import { RegisterForm } from '@/components/auth/register-form'
+
 
 export const Route = createFileRoute('/')({
   component: App,
 })
 
 function App() {
+  const { isAuthenticated } = useAuthStore()
+
   return (
-    <div className="text-center">
-      <header className="min-h-screen flex flex-col items-center justify-center bg-[#282c34] text-white text-[calc(10px+2vmin)]">
-        <img
-          src={logo}
-          className="h-[40vmin] pointer-events-none animate-[spin_20s_linear_infinite]"
-          alt="logo"
-        />
-        <p>
-          Edit <code>src/routes/index.tsx</code> and save to reload.
-        </p>
-        <a
-          className="text-[#61dafb] hover:underline"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <a
-          className="text-[#61dafb] hover:underline"
-          href="https://tanstack.com"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn TanStack
-        </a>
-      </header>
+    <div className="app-container">
+      <main className="app-main">
+        {isAuthenticated ? (
+          <TodoList />
+        ) : (
+          <div className="auth-buttons-container">
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="outline">Login</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <LoginForm />
+              </DialogContent>
+            </Dialog>
+
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button>Register</Button>
+              </DialogTrigger>
+              <DialogContent>
+                <RegisterForm />
+              </DialogContent>
+            </Dialog>
+          </div>
+        )}
+      </main>
     </div>
   )
 }

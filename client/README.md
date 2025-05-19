@@ -42,26 +42,12 @@ npm run check
 ```
 
 
-## Setting up Clerk
+## Shadcn
 
-- Set the `VITE_CLERK_PUBLISHABLE_KEY` in your `.env.local`.
-
-
-## Setting up Neon
-
-- Set the `DATABASE_URL` in your `.env`.
-
-
-## Setting up Netlify
-
-First install the Netlify CLI with:
+Add components using the latest version of [Shadcn](https://ui.shadcn.com/).
 
 ```bash
-npm install -g netlify-cli`
-```
-
-```bash
-netlify init
+pnpx shadcn@latest add button
 ```
 
 
