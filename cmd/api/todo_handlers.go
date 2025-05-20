@@ -39,9 +39,15 @@ func (app *application) handleGetTodos(c echo.Context) error {
 // @Router /api/v1/todos [post]
 func (app *application) handleCreateTodo(c echo.Context) error {
 	var input database.TodoCreate
+
 	if err := c.Bind(&input); err != nil {
 		return c.JSON(http.StatusBadRequest, echo.Map{"error": "Invalid request body"})
 	}
+
+	if err := c.Validate(&input); err != nil {
+		return c.JSON(http.StatusBadRequest, echo.Map{"error": "Validation failed", "details": err.Error()})
+	}
+
 	user := app.GetUserFromContext(c)
 	todo, err := app.models.Todos.Insert(&input, user.Id)
 	if err != nil {
@@ -65,14 +71,19 @@ func (app *application) handleCreateTodo(c echo.Context) error {
 // @Router /api/v1/todos/{id} [patch]
 func (app *application) handleUpdateTodo(c echo.Context) error {
 	id := c.Param("id")
-	var patch database.TodoPatch
+	var input database.TodoPatch
 
-	if err := c.Bind(&patch); err != nil {
+	if err := c.Bind(&input); err != nil {
 		return c.JSON(http.StatusBadRequest, echo.Map{"error": "Invalid request body"})
 	}
+
+	if err := c.Validate(&input); err != nil {
+		return c.JSON(http.StatusBadRequest, echo.Map{"error": "Validation failed", "details": err.Error()})
+	}
+
 	user := app.GetUserFromContext(c)
 
-	updated, err := app.models.Todos.Update(id, &patch, user.Id)
+	updated, err := app.models.Todos.Update(id, &input, user.Id)
 	if err != nil {
 		switch err.Error() {
 		case "todo not found":

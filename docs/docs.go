@@ -20,7 +20,7 @@ const docTemplate = `{
     "paths": {
         "/api/v1/auth/login": {
             "post": {
-                "description": "Logs in a user",
+                "description": "Authenticates a user and returns a JWT",
                 "consumes": [
                     "application/json"
                 ],
@@ -33,12 +33,12 @@ const docTemplate = `{
                 "summary": "Logs in a user",
                 "parameters": [
                     {
-                        "description": "User object",
+                        "description": "User login payload",
                         "name": "user",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/main.loginRequest"
+                            "$ref": "#/definitions/main.LoginRequest"
                         }
                     }
                 ],
@@ -46,7 +46,7 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/main.loginResponse"
+                            "$ref": "#/definitions/main.LoginResponse"
                         }
                     }
                 }
@@ -54,7 +54,7 @@ const docTemplate = `{
         },
         "/api/v1/auth/register": {
             "post": {
-                "description": "Registers a new user",
+                "description": "Creates a user account with email, password, and name",
                 "consumes": [
                     "application/json"
                 ],
@@ -62,28 +62,21 @@ const docTemplate = `{
                     "application/json"
                 ],
                 "tags": [
-                    "users"
+                    "auth"
                 ],
                 "summary": "Registers a new user",
                 "parameters": [
                     {
-                        "description": "User object",
+                        "description": "User registration payload",
                         "name": "user",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/main.registerRequest"
+                            "$ref": "#/definitions/main.RegisterRequest"
                         }
                     }
                 ],
-                "responses": {
-                    "201": {
-                        "description": "Created",
-                        "schema": {
-                            "$ref": "#/definitions/database.User"
-                        }
-                    }
-                }
+                "responses": {}
             }
         },
         "/api/v1/todos": {
@@ -270,7 +263,8 @@ const docTemplate = `{
                     "type": "string"
                 },
                 "title": {
-                    "type": "string"
+                    "type": "string",
+                    "minLength": 3
                 }
             }
         },
@@ -285,78 +279,52 @@ const docTemplate = `{
                 },
                 "title": {
                     "type": "string",
-                    "minLength": 1
+                    "minLength": 3
                 }
             }
         },
-        "database.User": {
+        "main.LoginRequest": {
             "type": "object",
             "properties": {
-                "createdAt": {
-                    "type": "string"
-                },
                 "email": {
-                    "type": "string"
-                },
-                "id": {
-                    "type": "string"
-                },
-                "name": {
-                    "type": "string"
-                },
-                "updatedAt": {
-                    "type": "string"
-                }
-            }
-        },
-        "main.loginRequest": {
-            "type": "object",
-            "required": [
-                "email",
-                "password"
-            ],
-            "properties": {
-                "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "user@example.com"
                 },
                 "password": {
                     "type": "string",
-                    "minLength": 8
+                    "example": "secret123"
                 }
             }
         },
-        "main.loginResponse": {
+        "main.LoginResponse": {
             "type": "object",
             "properties": {
                 "token": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "your.jwt.token"
                 }
             }
         },
-        "main.registerRequest": {
+        "main.RegisterRequest": {
             "type": "object",
-            "required": [
-                "email",
-                "name",
-                "password"
-            ],
             "properties": {
                 "email": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "user@example.com"
                 },
                 "name": {
                     "type": "string",
-                    "minLength": 2
+                    "example": "Jane Doe"
                 },
                 "password": {
                     "type": "string",
-                    "minLength": 8
+                    "example": "secret123"
                 }
             }
         }
     },
     "securityDefinitions": {
-        "ApiKeyAuth": {
+        "BearerAuth": {
             "description": "Enter your bearer token in the format \"Bearer \u003ctoken\u003e\".",
             "type": "apiKey",
             "name": "Authorization",
@@ -369,7 +337,7 @@ const docTemplate = `{
 var SwaggerInfo = &swag.Spec{
 	Version:          "1.0",
 	Host:             "",
-	BasePath:         "/api/v1",
+	BasePath:         "",
 	Schemes:          []string{"http"},
 	Title:            "Go Web API",
 	Description:      "A simple Go web API for managing todos.",

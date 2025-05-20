@@ -14,11 +14,10 @@ import (
 // @title Go Web API
 // @version 1.0
 // @description A simple Go web API for managing todos.
-// @BasePath /api/v1
 // @schemes http
 // @produce application/json
 // @consumes application/json
-// @securityDefinitions.apikey ApiKeyAuth
+// @securityDefinitions.apikey BearerAuth
 // @in header
 // @name Authorization
 // @description Enter your bearer token in the format "Bearer <token>".

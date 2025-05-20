@@ -60,16 +60,20 @@ export function TodoList() {
         },
         body: JSON.stringify({ title, description }),
       })
-      if (!res.ok) throw new Error('Failed to add todo')
-      const newTodo = await res.json()
-      setTodos([...todos, newTodo])
+      
+      const data = await res.json()
+      if (!res.ok) {
+        throw new Error(data.details || data.error || 'Failed to add todo')
+      }
+      
+      setTodos([...todos, data])
       setTitle('')
       setDescription('')
     } catch (error) {
       const json = {
         variant: "destructive",
         title: "Error",
-        description: "Failed to add todo",
+        description: error instanceof Error ? error.message : "Something went wrong",
       }
       toast(JSON.stringify(json, null, 2))
     } finally {
@@ -110,6 +114,35 @@ export function TodoList() {
       if (!res.ok) throw new Error('Failed to update todo')
       setTodos(todos.map(todo => 
         todo.id === id ? { ...todo, completed } : todo
+      ))
+    } catch (error) {
+      const json = {
+        variant: "destructive",
+        title: "Error",
+        description: error instanceof Error ? error.message : "Failed to update todo",
+      }
+      toast(JSON.stringify(json, null, 2))
+    }
+  }
+
+  const onEdit = async (id: string, title: string, description: string) => {
+    try {
+      const res = await fetch(`http://localhost:8080/api/v1/todos/${id}`, {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({ title, description }),
+      })
+      
+      const data = await res.json()
+      if (!res.ok) {
+        throw new Error(data.details || data.error || 'Failed to update todo')
+      }
+      
+      setTodos(todos.map(todo => 
+        todo.id === id ? { ...todo, title, description } : todo
       ))
     } catch (error) {
       const json = {
@@ -195,7 +228,13 @@ export function TodoList() {
           </div>
         ) : (
           filteredTodos.map((todo) => (
-            <TodoItem key={todo.id} todo={todo} onDelete={onDelete} onToggle={onToggle} />
+            <TodoItem 
+              key={todo.id} 
+              todo={todo} 
+              onDelete={onDelete} 
+              onToggle={onToggle}
+              onEdit={onEdit}
+            />
           ))
         )}
       </div>

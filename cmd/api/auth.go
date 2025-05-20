@@ -10,32 +10,36 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-type loginRequest struct {
-	Email    string `json:"email" binding:"required,email"`
-	Password string `json:"password" binding:"required,min=8"`
+// @BasePath /api/v1/auth
+
+// LoginRequest represents the login payload
+type LoginRequest struct {
+	Email    string `json:"email" example:"user@example.com"`
+	Password string `json:"password" example:"secret123"`
 }
 
-type loginResponse struct {
-	Token string `json:"token"`
+// LoginResponse represents the JWT response
+type LoginResponse struct {
+	Token string `json:"token" example:"your.jwt.token"`
 }
 
-type registerRequest struct {
-	Email    string `json:"email" binding:"required,email"`
-	Password string `json:"password" binding:"required,min=8"`
-	Name     string `json:"name" binding:"required,min=2"`
+// RegisterRequest represents the registration payload
+type RegisterRequest struct {
+	Email    string `json:"email" example:"user@example.com"`
+	Password string `json:"password" example:"secret123"`
+	Name     string `json:"name" example:"Jane Doe"`
 }
 
 // RegisterUser registers a new user
-// @Summary		Registers a new user
-// @Description	Registers a new user
-// @Tags		users
-// @Accept		json
-// @Produce		json
-// @Param		user	body	registerRequest	true	"User object"
-// @Success		201		{object}	database.User
-// @Router		/api/v1/auth/register [post]
+// @Summary Registers a new user
+// @Description Creates a user account with email, password, and name
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param user body RegisterRequest true "User registration payload"
+// @Router /api/v1/auth/register [post]
 func (app *application) registerUser(c echo.Context) error {
-	var register registerRequest
+	var register RegisterRequest
 
 	if err := c.Bind(&register); err != nil {
 		return c.JSON(http.StatusBadRequest, echo.Map{"error": err.Error()})
@@ -60,17 +64,16 @@ func (app *application) registerUser(c echo.Context) error {
 }
 
 // Login logs in a user
-//
-// @Summary		Logs in a user
-// @Description	Logs in a user
-// @Tags		auth
-// @Accept		json
-// @Produce		json
-// @Param		user	body	loginRequest	true	"User object"
-// @Success		200		{object}	loginResponse
-// @Router		/api/v1/auth/login [post]
+// @Summary Logs in a user
+// @Description Authenticates a user and returns a JWT
+// @Tags auth
+// @Accept json
+// @Produce json
+// @Param user body LoginRequest true "User login payload"
+// @Success 200 {object} LoginResponse
+// @Router /api/v1/auth/login [post]
 func (app *application) login(c echo.Context) error {
-	var auth loginRequest
+	var auth LoginRequest
 	if err := c.Bind(&auth); err != nil {
 		return c.JSON(http.StatusBadRequest, echo.Map{"error": err.Error()})
 	}
@@ -97,5 +100,5 @@ func (app *application) login(c echo.Context) error {
 		return c.JSON(http.StatusInternalServerError, echo.Map{"error": "Error generating token"})
 	}
 
-	return c.JSON(http.StatusOK, loginResponse{Token: tokenString})
+	return c.JSON(http.StatusOK, LoginResponse{Token: tokenString})
 }

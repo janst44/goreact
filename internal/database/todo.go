@@ -23,12 +23,12 @@ type Todo struct {
 }
 
 type TodoCreate struct {
-	Title       string  `json:"title" binding:"required, min:1"`
+	Title       string  `json:"title" validate:"required,min=3"`
 	Description *string `json:"description,omitempty"`
 }
 
 type TodoPatch struct {
-	Title       *string `json:"title,omitempty" binding:"min=1"`
+	Title       *string `json:"title,omitempty" validate:"omitempty,min=3"`
 	Description *string `json:"description,omitempty"`
 	Completed   *bool   `json:"completed,omitempty"`
 }
