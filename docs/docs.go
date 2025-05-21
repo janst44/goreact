@@ -20,7 +20,7 @@ const docTemplate = `{
     "paths": {
         "/api/v1/auth/login": {
             "post": {
-                "description": "Authenticates a user and returns a JWT",
+                "description": "Authenticates a user and returns a JWT token for future requests.",
                 "consumes": [
                     "application/json"
                 ],
@@ -46,7 +46,19 @@ const docTemplate = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/main.LoginResponse"
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -76,7 +88,20 @@ const docTemplate = `{
                         }
                     }
                 ],
-                "responses": {}
+                "responses": {
+                    "201": {
+                        "description": "Created",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
             }
         },
         "/api/v1/todos": {
@@ -86,7 +111,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Get all todos for user",
+                "description": "Retrieves a list of all todos for the authenticated user.",
                 "consumes": [
                     "application/json"
                 ],
@@ -106,6 +131,12 @@ const docTemplate = `{
                                 "$ref": "#/definitions/database.Todo"
                             }
                         }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             },
@@ -115,7 +146,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Create a new todo",
+                "description": "Adds a new todo for the authenticated user.",
                 "consumes": [
                     "application/json"
                 ],
@@ -143,6 +174,18 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/database.Todo"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }
@@ -154,7 +197,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Delete a todo",
+                "description": "Deletes the todo with the specified ID.",
                 "consumes": [
                     "application/json"
                 ],
@@ -178,7 +221,19 @@ const docTemplate = `{
                     "204": {
                         "description": "No Content",
                         "schema": {
-                            "$ref": "#/definitions/database.Todo"
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "type": "string"
                         }
                     }
                 }
@@ -189,7 +244,7 @@ const docTemplate = `{
                         "BearerAuth": []
                     }
                 ],
-                "description": "Update a todo",
+                "description": "Updates the fields of a todo identified by ID.",
                 "consumes": [
                     "application/json"
                 ],
@@ -224,6 +279,24 @@ const docTemplate = `{
                         "schema": {
                             "$ref": "#/definitions/database.Todo"
                         }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not found",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 }
             }
@@ -234,22 +307,28 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "completed": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "example": false
                 },
                 "createdAt": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "2025-05-20T14:28:23Z"
                 },
                 "description": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Milk, eggs, and bread"
                 },
                 "id": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
                 },
                 "title": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Buy groceries"
                 },
                 "userId": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "user-abc-123"
                 }
             }
         },
@@ -260,11 +339,13 @@ const docTemplate = `{
             ],
             "properties": {
                 "description": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Schedule annual check-up"
                 },
                 "title": {
                     "type": "string",
-                    "minLength": 3
+                    "minLength": 3,
+                    "example": "Call the doctor"
                 }
             }
         },
@@ -272,14 +353,17 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "completed": {
-                    "type": "boolean"
+                    "type": "boolean",
+                    "example": true
                 },
                 "description": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "Ask about whitening treatment"
                 },
                 "title": {
                     "type": "string",
-                    "minLength": 3
+                    "minLength": 3,
+                    "example": "Call the dentist"
                 }
             }
         },
@@ -293,15 +377,6 @@ const docTemplate = `{
                 "password": {
                     "type": "string",
                     "example": "secret123"
-                }
-            }
-        },
-        "main.LoginResponse": {
-            "type": "object",
-            "properties": {
-                "token": {
-                    "type": "string",
-                    "example": "your.jwt.token"
                 }
             }
         },

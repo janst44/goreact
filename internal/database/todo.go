@@ -12,25 +12,24 @@ type TodoModel struct {
 	DB *sql.DB
 }
 
-// Base Todo struct with all fields
 type Todo struct {
-	Id          string    `json:"id"`
-	Title       string    `json:"title"`
-	Description *string   `json:"description,omitempty"`
-	Completed   bool      `json:"completed"`
-	CreatedAt   time.Time `json:"createdAt"`
-	UserId      string    `json:"userId"`
+	Id          string    `json:"id" example:"123e4567-e89b-12d3-a456-426614174000"`
+	Title       string    `json:"title" example:"Buy groceries"`
+	Description *string   `json:"description,omitempty" example:"Milk, eggs, and bread"`
+	Completed   bool      `json:"completed" example:"false"`
+	CreatedAt   time.Time `json:"createdAt" example:"2025-05-20T14:28:23Z"`
+	UserId      string    `json:"userId" example:"user-abc-123"`
 }
 
 type TodoCreate struct {
-	Title       string  `json:"title" validate:"required,min=3"`
-	Description *string `json:"description,omitempty"`
+	Title       string  `json:"title" validate:"required,min=3" example:"Call the doctor"`
+	Description *string `json:"description,omitempty" example:"Schedule annual check-up"`
 }
 
 type TodoPatch struct {
-	Title       *string `json:"title,omitempty" validate:"omitempty,min=3"`
-	Description *string `json:"description,omitempty"`
-	Completed   *bool   `json:"completed,omitempty"`
+	Title       *string `json:"title,omitempty" validate:"omitempty,min=3" example:"Call the dentist"`
+	Description *string `json:"description,omitempty" example:"Ask about whitening treatment"`
+	Completed   *bool   `json:"completed,omitempty" example:"true"`
 }
 
 func (m *TodoModel) Get(userId string) ([]Todo, error) {

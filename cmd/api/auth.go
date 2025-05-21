@@ -10,8 +10,6 @@ import (
 	"golang.org/x/crypto/bcrypt"
 )
 
-// @BasePath /api/v1/auth
-
 // LoginRequest represents the login payload
 type LoginRequest struct {
 	Email    string `json:"email" example:"user@example.com"`
@@ -30,13 +28,14 @@ type RegisterRequest struct {
 	Name     string `json:"name" example:"Jane Doe"`
 }
 
-// RegisterUser registers a new user
 // @Summary Registers a new user
 // @Description Creates a user account with email, password, and name
 // @Tags auth
 // @Accept json
 // @Produce json
-// @Param user body RegisterRequest true "User registration payload"
+// @Param user body main.RegisterRequest true "User registration payload"
+// @Success 201 {string} string "Created"
+// @Failure 400 {string} string "Bad Request"
 // @Router /api/v1/auth/register [post]
 func (app *application) registerUser(c echo.Context) error {
 	var register RegisterRequest
@@ -63,14 +62,15 @@ func (app *application) registerUser(c echo.Context) error {
 	return c.JSON(http.StatusCreated, user)
 }
 
-// Login logs in a user
 // @Summary Logs in a user
-// @Description Authenticates a user and returns a JWT
+// @Description Authenticates a user and returns a JWT token for future requests.
 // @Tags auth
 // @Accept json
 // @Produce json
-// @Param user body LoginRequest true "User login payload"
-// @Success 200 {object} LoginResponse
+// @Param user body main.LoginRequest true "User login payload"
+// @Success 200 {string} main.LoginResponse
+// @Failure 400 {string} string "Bad Request"
+// @Failure 401 {string} string "Unauthorized"
 // @Router /api/v1/auth/login [post]
 func (app *application) login(c echo.Context) error {
 	var auth LoginRequest
