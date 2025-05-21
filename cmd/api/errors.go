@@ -10,7 +10,7 @@ type ErrorResponse struct {
 }
 
 type ValidationResponse struct {
-	Code    ErrorCode         `json:"code" example:"400"`
+	Code    ErrorCode         `json:"code" example:"VALIDATION_ERROR"`
 	Message string            `json:"message" example:"Validation failed"`
 	Errors  []ValidationError `json:"errors"`
 }
